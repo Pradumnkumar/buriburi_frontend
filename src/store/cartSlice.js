@@ -58,7 +58,7 @@ const cartSlice = createSlice({
             console.log(item);
             if (item) {
                 const item_qty_set = (+_qty < +item.countInStock) ? +_qty : +item.countInStock;
-                state.totalPrice = state.totalPrice + (+item_qty_set - +item.qty) * +item.price;
+                state.totalPrice += (+item_qty_set - +item.qty) * +item.price;
                 item.qty = item_qty_set;
             }
         },

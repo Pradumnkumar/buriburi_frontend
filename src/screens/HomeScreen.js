@@ -26,10 +26,9 @@ function HomeScreen() {
                 <li>Fetch all the cart data and save in browser. Send it to backend when pressed order or entered/exited cart or page</li>
                 <li>Create authentication</li>
                 <li>Integrate cart to user</li>
-                <li>Add function to Add to cart, save for later and remove</li>
                 <li>Create method to have navigation and adding to cart without authentication</li>
                 <li>Add payment portal</li>
-                <li>DONE: On hovering on products have add to cart button</li>
+                <li>UI so when add to cart is pressed there is some response</li>
             </ol>
         </>
     );

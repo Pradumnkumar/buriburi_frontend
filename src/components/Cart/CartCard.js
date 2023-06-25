@@ -1,54 +1,58 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ButtonGroup, Button, Card, Row, Col, Image, ListGroup } from "react-bootstrap";
-
-import updateCart from "../../state/action-creators/updateCartAction"
+import { cartActions } from "../../store/cartSlice";
 
 
 const CartCard = (prop) => {
 
-    const [numOrders, setNumOrders] = useState(prop.input.qty);
+    const cart = useSelector(state => state.cart);
+    const product = prop.product;
+    const product_cart = cart.items.filter(item => item.id === product.id)[0];
+    const [numOrders, setNumOrders] = useState(product_cart.qty);
     const [errorMessage, setErrorMessage] = useState("");
-    const product = prop.input.product;
-
+    console.log(cart);
     const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(updateCart(product._id, numOrders))
-    }, [dispatch, product._id, numOrders]);
+
+    const removeHandler = () => {
+        dispatch(cartActions.removeItem(product.id));
+    }
 
     const reduceHandler = () => {
-        if(+numOrders > 1){
+        if (+numOrders > 1) {
             setNumOrders(prevState => prevState - 1);
-            prop.setPrice(prop.price - +product.price);
+            dispatch(cartActions.decreaseQuantity(product.id));
             setErrorMessage("");
         }
     };
 
     const increaseHandler = () => {
-        if(numOrders < product.countInStock){
+        if (numOrders < product.countInStock) {
             setNumOrders(prevState => parseInt(prevState) + 1);
-            prop.setPrice(prop.price + +product.price);
+            dispatch(cartActions.increaseQuantity(product.id));
             setErrorMessage("");
         }
-        else{
+        else {
             setNumOrders(product.countInStock);
         }
     };
 
     const quantityHandler = (event) => {
         if (+event.target.value > product.countInStock) {
-            prop.setPrice(prop.price + (product.countInStock - numOrders) * (+product.price));
-            setNumOrders(product.countInStock);
+            const _id = product.id;
+            const _qty = product.countInStock;
+            setNumOrders(_qty);
+            dispatch(cartActions.setQuantity({ _id, _qty }));
             setErrorMessage("Apologies, Not enough in Stock.");
         }
-        else if(+event.target.value <= 0){
-            // setNumOrders(1);
-            // prop.setPrice(prop.price + (+event.target.value - numOrders) * (+product.price));
+        else if (+event.target.value <= 0) {
             setErrorMessage("")
         }
         else {
-            prop.setPrice(prop.price + (+event.target.value - numOrders) * (+product.price));
-            setNumOrders(event.target.value);
+            const _id = product.id;
+            const _qty = event.target.value;
+            setNumOrders(_qty);
+            dispatch(cartActions.setQuantity({ _id, _qty }));
             setErrorMessage("");
         }
     };
@@ -101,7 +105,7 @@ const CartCard = (prop) => {
                                     <Button variant="secondary">Save for Later</Button>
                                 </Col>
                                 <Col>
-                                    <Button variant="secondary">REMOVE</Button>
+                                    <Button variant="secondary" onClick={removeHandler}>REMOVE</Button>
                                 </Col>
                             </Row>
                         </ListGroup.Item>

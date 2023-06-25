@@ -3,11 +3,19 @@ import { Button, Card } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
 import Rating from './Rating'
+import { useDispatch } from "react-redux"
+import {cartActions} from "../../store/cartSlice"
 
 
 function Product({ product }) {
 
+    const dispatch = useDispatch();
     const [focus, setFocus] = useState(false);
+
+    const addToCartHandler = () => {
+        console.log('IN ADD TO CART')
+        dispatch(cartActions.addItem(product));
+    }
 
     const focusHandler = () => {
         setFocus(true);
@@ -19,12 +27,12 @@ function Product({ product }) {
 
     return (
         <Card onMouseEnter={focusHandler} onMouseLeave={removeFocusHandler} className="my-3 p-3 rounded">
-            <Link to={`/resources/product/${product._id}`}>
+            <Link to={`product/${product.id}`}>
                 <Card.Img src={product.image} />
             </Link>
 
             <Card.Body>
-                <Link to={`/resources/product/${product._id}`}>
+                <Link to={`product/${product.id}`}>
                     <Card.Title as="div">
                         <strong>{product.name}</strong>
                     </Card.Title>
@@ -39,7 +47,7 @@ function Product({ product }) {
                 </Card.Text>
             </Card.Body>
 
-            {focus && <Button className='btn-block' disabled={product.countInStock === 0} type='button' >Add to cart</Button>}
+            {focus && <Button className='btn-block' disabled={product.countInStock === 0} type='button' onClick={addToCartHandler}>Add to cart</Button>}
         </Card>
     )
 }

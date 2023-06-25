@@ -4,12 +4,8 @@ import classes from './Modal.module.css'
 
 function Backdrop(props) {
 
-    const setCartBar = () => {
-        props.setCartBar(false);
-    }
-
     return (
-        <div onClick={setCartBar} className={classes.backdrop}>{props.children}</div>
+        <div onClick={props.setCartBar} className={classes.backdrop}>{props.children}</div>
     );
 }
 

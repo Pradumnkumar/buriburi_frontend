@@ -1,36 +1,27 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Row, Col } from "react-bootstrap"
-import { useDispatch, useSelector } from "react-redux";
 
+import { useLoaderData } from "react-router-dom";
 import Product from "../components/Product/Product";
-import Loader from "../components/UI/Loader";
-import ErrorMessage from "../components/UI/ErrorMessage";
-import listProducts from "../state/action-creators/allProductsAction";
+// import Loader from "../components/UI/Loader";
+// import ErrorMessage from "../components/UI/ErrorMessage";
+import axios from "axios";
 
 // The following imports are for api support
 
 function HomeScreen() {
-    const dispatch = useDispatch()
-    const productList = useSelector(state => state.productList)
-    const { error, loading, products } = productList
-    useEffect(() => {
-        dispatch(listProducts())
-    }, [dispatch])
+    const products = useLoaderData();
 
     return (
         <>
             <h1>Latest Products</h1>
-            {loading ? <Loader />
-                : error ? <ErrorMessage variant='danger'>{error}</ErrorMessage>
-                    :
-                    <Row>
-                        {products.map(product => (
-                            <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                                <Product product={product} />
-                            </Col>
-                        ))}
-                    </Row>
-            }
+            <Row>
+                {products.map(product => (
+                    <Col key={product.id} sm={12} md={6} lg={4} xl={3}>
+                        <Product product={product} />
+                    </Col>
+                ))}
+            </Row>
             <ol>
                 <li>Fetch all the cart data and save in browser. Send it to backend when pressed order or entered/exited cart or page</li>
                 <li>Create authentication</li>
@@ -45,3 +36,8 @@ function HomeScreen() {
 }
 
 export default HomeScreen;
+
+export const getAllProducts = async ({request, params}) => {
+    const response = await axios.get('http://localhost:8000/api/products');
+    return response.data;
+}

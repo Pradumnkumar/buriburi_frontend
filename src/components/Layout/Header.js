@@ -1,12 +1,15 @@
 import React from 'react'
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 import './Header.css'
+import uiSlice from '../../store/uiSlice'
 
 function Header(props) {
+  const dispatch = useDispatch();
   const cartButtonHandler = () => {
-    props.setCartBar(true);
+    dispatch(uiSlice.actions.toggleCart());
   }
 
   return (

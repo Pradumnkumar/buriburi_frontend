@@ -1,9 +1,9 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from 'react-router-dom'
+import { Link, useNavigation } from 'react-router-dom'
 
-// import Loader from "../UI/Loader";
+import Loader from "../UI/Loader";
 // import ErrorMessage from "../UI/ErrorMessage";
 import CartCard from "../Cart/CartCard";
 import CartPricingCard from "../Cart/CartPricingCard";
@@ -13,7 +13,9 @@ import uiSlice from "../../store/uiSlice";
 
 function CartSideBar() {
     const cart = useSelector(state => state.cart);
-    console.log(cart);
+
+    const navigation = useNavigation();
+
     const dispatch = useDispatch();
 
     const setCartBar = () => {
@@ -22,10 +24,10 @@ function CartSideBar() {
 
     return (
         <>
-            {/* {loading ? <Loader />
-                : error ? <ErrorMessage variant='danger'>{error}</ErrorMessage>
+            {navigation.state === "loading" ? <Loader />
+                // : error ? <ErrorMessage variant='danger'>{error}</ErrorMessage>
                     :
-                    <> */}
+                    <>
                         <Row>
                             <Link to="/cart" className='btn btn-light my-3' onClick={setCartBar}>Go to Cart</Link>
                             <Col>
@@ -43,8 +45,8 @@ function CartSideBar() {
                             </Col>
                         </Row>
                     </>
-    //         }
-    //     </>
+            }
+        </>
     );
 }
 

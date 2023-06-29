@@ -2,22 +2,25 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
-// import Loader from "../components/UI/Loader";
+import Loader from "../components/UI/Loader";
 // import ErrorMessage from "../components/UI/ErrorMessage";
 import CartCard from "../components/Cart/CartCard";
-import CartPricingCard from "../components/Cart/CartPricingCard";;
+import CartPricingCard from "../components/Cart/CartPricingCard";
+import { useNavigation } from "react-router-dom";
+
 
 // The following imports are for api support
 
 function CartScreen(props) {
 
+    const navigation = useNavigation();
     const cart = useSelector(state => state.cart);
 
     return (
         <>
-            {/* {loading ? <Loader />
-                : error ? <ErrorMessage variant='danger'>{error}</ErrorMessage>
-                    : */}
+            {navigation.state === "loading" ? <Loader />
+                // : error ? <ErrorMessage variant='danger'>{error}</ErrorMessage>
+                    :
                     <Row>
                         <Col md={8} >
                             {cart.items.map((orderItem, idx) => (
@@ -31,7 +34,7 @@ function CartScreen(props) {
                             <CartPricingCard price={cart.totalPrice} discount={0} delivery={0} />
                         </Col>
                     </Row>
-            {/* } */}
+            }
         </>
     );
 }
